@@ -1,9 +1,5 @@
 import scala.io.StdIn._
 
-var currentTest = 0
-var currentAssn = 0
-var currentQuiz = 0
-
 def average(input: List[Double]): Double = if (input.isEmpty) 0 else input.sum / input.length
 
 def fullAve(tests: Double, assignments: Double, quizzes: Double): Double = (tests * 0.4) + (assignments * 0.4) + (quizzes * 0.2)
@@ -26,7 +22,7 @@ def varTest (tests: List[Double]): Double = {
   if (tests.isEmpty) {
     0
   } else {
-    tests.foreach(square(_ - average(tests))) / tests.length
+    return (square(tests.head - average(tests)) + varTest(tests.tail)) / tests.length
   }
 }
 
@@ -34,7 +30,7 @@ def varAssn (assns: List[Double]): Double = {
   if (assns.isEmpty) {
     0
   } else {
-    assns.foreach(square(_ - average(assns))) / assns.length
+    return (square(assns.head - average(assns)) + varTest(assns.tail)) / assns.length
   }
 }
 
@@ -42,7 +38,7 @@ def varQuiz (quizzes: List[Double]): Double = {
   if (quizzes.isEmpty) {
     0
   } else {
-    quizzes.foreach(square(_ - average(quizzes))) / quizzes.length
+    return (square(quizzes.head - average(quizzes)) + varTest(quizzes.tail)) / quizzes.length
   }
 }
 
@@ -62,27 +58,27 @@ var assignments: List[Double] = List()
 
 def mainGrades(tests: List[Double], assignments: List[Double], quizzes: List[Double]): Unit = {
   printMenu
-  readInt() match {
-    case 1 =>
+  readLine() match {
+    case "1" =>
       println("Add a test grade.")
       mainGrades(readDouble() :: tests, assignments, quizzes)
-    case 2 =>
+    case "2" =>
       println("Add a quiz grade.")
       mainGrades(tests, readDouble() :: assignments, quizzes)
-    case 3 =>
+    case "3" =>
       println("Add an assignment grade.")
       mainGrades(tests, assignments, readDouble() :: quizzes)
-    case 4 =>
+    case "4" =>
       println(s"The averege is ${courseAverage(tests, assignments, quizzes)}")
       mainGrades(tests, assignments, quizzes)
-    case 5 =>
+    case "5" =>
       println(s"The standard deviation is ${stdv(tests, assignments, quizzes)}")
       mainGrades(tests, assignments, quizzes)
-    case 6 =>
-
+    case "6" =>
+      println("Quitting program")
     case _ =>
-    // Print quit.
-    // return the mainGrades function value for the input
+      println("Try again")
+      mainGrades(tests, assignments, quizzes)
   }
 }
 
